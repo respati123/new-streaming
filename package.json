@@ -8,6 +8,13 @@
   ],
   "scripts": {
     "dev": "bun run --cwd be dev & bun run --cwd fe dev",
-    "install:all": "bun install"
+    "dev:be": "bun run --cwd be dev",
+    "dev:fe": "bun run --cwd fe dev",
+    "install:all": "bun install",
+    "db:generate": "bun run --cwd be db:generate",
+    "db:push": "bun run --cwd be db:push",
+    "db:studio": "bun run --cwd be db:studio",
+    "build:fe": "bun run --cwd fe build",
+    "start:be": "bun run --cwd be start"
   }
 }
