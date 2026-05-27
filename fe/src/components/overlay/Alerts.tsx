@@ -84,44 +84,49 @@ export function DonationAlert() {
   if (!d) return null;
 
   return (
-    <div className="absolute top-10 left-1/2 -translate-x-1/2 z-30 pointer-events-none">
+    <div className="absolute top-10 right-10 z-30 pointer-events-none mt-12 mr-4">
+      {/* Added mt-12 to compensate for the avatar breaking out of the top border */}
       <div 
-        className={`backdrop-blur-md px-8 py-6 animate-pop-in relative overflow-hidden min-w-[480px] max-w-[540px] rounded-xl ${getAlertFrameClass(d.amount)}`}
+        className={`backdrop-blur-md px-6 pt-20 pb-8 animate-slide-in-right relative min-w-[320px] max-w-[380px] rounded-2xl ${getAlertFrameClass(d.amount)}`}
         style={{ backgroundColor: "rgba(0, 0, 0, 0.45)" }}
       >
         <Particles />
         
-        <div className="flex gap-5 items-center">
-          {/* Circular Avatar Frame */}
-          <div className="relative w-16 h-16 flex-shrink-0 rounded-full bg-accent/10 border border-accent/40 overflow-hidden flex items-center justify-center p-0.5 shadow-[0_0_20px_rgba(var(--accent-rgb),0.3)]">
-            <img
-              src={d.profileImageUrl || `https://api.dicebear.com/7.x/pixel-art/svg?seed=${d.name}`}
-              className="w-full h-full object-cover rounded-full bg-black/50"
-              alt="Donation Avatar"
-            />
+        {/* Floating Avatar Container */}
+        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-accent/10 border-4 border-black overflow-hidden flex items-center justify-center p-0.5 shadow-[0_0_40px_rgba(255,255,255,0.2)] z-10 glow-border">
+          <img
+            src={d.profileImageUrl || `https://api.dicebear.com/7.x/pixel-art/svg?seed=${d.name}`}
+            className="w-full h-full object-cover rounded-full bg-black/80"
+            alt="Donation Avatar"
+          />
+        </div>
+
+        <div className="flex flex-col items-center text-center relative z-0 mt-2">
+          <div className="text-[10px] font-display uppercase tracking-[0.4em] text-accent mb-2 drop-shadow-sm glow-text">
+            New Donation
+          </div>
+          
+          <div className="text-2xl font-display leading-tight mb-0.5">
+            <span className="text-primary font-bold glow-text">{d.youtubeName || d.name}</span>
           </div>
 
-          {/* Donation Info */}
-          <div className="flex-1 text-left">
-            <div className="text-xs font-display uppercase tracking-[0.3em] text-accent mb-0.5 drop-shadow-sm">
-              New Donation
+          {d.youtubeName && (
+            <div className="text-[11px] font-medium text-white/50 mb-3 flex items-center justify-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-white/30 inline-block"></span>
+              Alias: <span className="text-white/80">{d.name}</span>
+              <span className="w-1.5 h-1.5 rounded-full bg-white/30 inline-block"></span>
             </div>
-            
-            <div className="text-xl font-display glow-text leading-tight mb-1">
-              <span className="text-primary font-bold">{d.youtubeName || d.name}</span>
-              <span className="mx-1 text-foreground">berdonasi</span>
-              <span className="text-accent font-bold">Rp {d.amount.toLocaleString("id-ID")}</span>
-            </div>
-            
-            {/* Show alias if youtubeName is available and they differ, or just show alias if we have youtubeName */}
-            {d.youtubeName && (
-              <div className="text-xs font-medium text-white/50 mb-1.5 flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-white/30 inline-block"></span>
-                Alias: <span className="text-white/80">{d.name}</span>
-              </div>
-            )}
-            
-            <p className="text-sm text-foreground mt-1 italic border-l-2 border-accent/50 pl-3 py-0.5 bg-accent/5 rounded-r">
+          )}
+          
+          <div className="text-sm text-foreground/80 mb-1 mt-1">berdonasi sebesar</div>
+          
+          <div className="text-4xl font-display glow-text text-accent font-bold mb-6 drop-shadow-[0_0_15px_rgba(var(--accent-rgb),0.8)]">
+            Rp {d.amount.toLocaleString("id-ID")}
+          </div>
+          
+          <div className="w-full relative">
+            <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent blur-sm"></div>
+            <p className="relative text-base text-foreground italic border-y border-accent/30 py-3 px-4 bg-black/40 rounded-lg shadow-inner">
               "{d.message}"
             </p>
           </div>
