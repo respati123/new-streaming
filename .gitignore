@@ -1,0 +1,13 @@
+node_modules
+.env
+.vscode
+.antigravitycli
+.agent
+.agents
+.claude
+be/dist
+fe/dist
+fe/node_modules
+be/node_modules
+be/coverage
+fe/coverage

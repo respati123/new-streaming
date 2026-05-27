@@ -1,0 +1,13 @@
+{
+  "name": "streaming-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "be",
+    "fe"
+  ],
+  "scripts": {
+    "dev": "bun run --cwd be dev & bun run --cwd fe dev",
+    "install:all": "bun install"
+  }
+}
