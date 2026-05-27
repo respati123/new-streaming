@@ -66,6 +66,15 @@ bun run preview      # Preview production build
 - **Donation Alerts**: Visual notifications for donations
 - **AI Dialogue Box**: AI-generated responses and interactions
 
+## Mandatory Planning Workflow (GitHub Issues)
+
+For all feature development and bug fixes (exempting minor tasks like typos or quick questions), strictly follow this workflow:
+1. **Draft Locally**: Create a detailed `issue.md` file locally outlining the plan.
+2. **Await Approval**: Wait for the user to explicitly approve the `issue.md` plan.
+3. **Publish Issue**: Automatically use the `gh` CLI (e.g., `gh issue create --title "..." --body-file issue.md`) to publish the issue to GitHub.
+4. **Execute**: Implement the approved code changes.
+5. **Close Issue**: Once completed and verified, use the `gh` CLI to close the GitHub issue.
+
 ## Development Notes
 
 1. **Database**: Always use the existing Prisma client from `src/lib/prisma.ts`
