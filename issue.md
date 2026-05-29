@@ -1,27 +1,24 @@
-# Refactor Donation Alert to Holographic Trading Card UI
+# Implement AI Queueing System for Chat Commands
 
 ## Context
-The user requested a complete visual overhaul of the Donation Alert UI. They selected the "Holographic Trading Card" concept. The layout needs to change from a top-center horizontal bar to a top-right vertical card, featuring a massive floating avatar.
+When viewers use chat commands like `!tanya` or `!roast`, the backend makes synchronous requests to the OpenAI API via `generateRedeemReply`. If multiple viewers use these commands simultaneously, it causes concurrent API requests, which can lead to rate limits (429 errors) and server lag.
 
 ## Implementation Steps
 
-### 1. Update Component Wrapper
-In `fe/src/components/overlay/Alerts.tsx`:
-- Change wrapper classes: `absolute top-10 right-12 z-30 pointer-events-none`
-- Change container classes to: `backdrop-blur-md px-6 pt-20 pb-8 animate-slide-in-right relative flex flex-col items-center text-center min-w-[320px] max-w-[380px] rounded-2xl`
+### 1. Create the Queue Service
+Create `be/src/services/aiQueue.ts`:
+- Build a standard class-based Async Queue (`AIQueue`).
+- Maintain an internal array of tasks.
+- Implement a `processNext()` loop that runs tasks sequentially.
+- Add a 1000ms timeout between tasks to respect OpenAI rate limits.
 
-### 2. Avatar Styling (Pop-out effect)
-- Change avatar container: `absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32`
-- Ensure the image uses `rounded-full object-cover` and retains the glowing shadow.
-
-### 3. Typography Hierarchy
-- **Header**: "NEW DONATION" in small, tracked-out glowing text (`tracking-[0.3em] text-accent`).
-- **Name**: The donor's name (`d.youtubeName || d.name`) in `text-2xl font-bold text-primary`.
-- **Amount**: Massive glow `text-4xl text-accent glow-text`.
-- **Message**: Rendered inside a stylized blockquote with a top-border or subtle background fill.
+### 2. Integrate into Streamer.bot Events
+In `be/src/services/streamerbot.ts`:
+- Import `aiQueue`.
+- Wrap the `generateRedeemReply` and `broadcastChat` logic for `!tanya` inside `aiQueue.add(...)`.
+- Wrap the `generateRedeemReply`, `broadcastChat`, and `client.sendMessage` logic for `!roast` inside `aiQueue.add(...)`.
+- Ensure points are still deducted *before* entering the queue so users can't spam bypass the point check.
 
 ## Verification
-1. Trigger a test donation via the dashboard (`/`).
-2. Verify the card slides in from the right.
-3. Verify the avatar overlaps the top edge smoothly.
-4. Verify the text hierarchy matches a "Trading Card" aesthetic.
+- Spam `!tanya` in the chat.
+- Check the console to verify that the AI replies are generated sequentially rather than all at once.

@@ -38,5 +38,4 @@ This is a streaming-focused content automation pipeline and backend service. It 
 - **Code Style:** Use modern ES modules syntax, `async/await`, and handle errors gracefully.
 
 ## Next Steps / Current Focus
-- Developing a robust **Scriptwriter Skill** to automate the generation of highly engaging, TTS-friendly short-form scripts with scene markers.
 - Solidifying the WebSocket and Streamer.bot event handling.

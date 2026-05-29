@@ -5,6 +5,7 @@ import { broadcastChat } from "../lib/ws";
 import { generateSubscriberTts } from "./elevenlabs";
 import { setActiveTheme } from "../routes/theme";
 import { generateRedeemReply } from "./ai";
+import { aiQueue } from "./aiQueue";
 import { COST_ROAST, COST_TANYA, DAILY_LOGIN_POINTS } from "../lib/points";
 
 const client = new StreamerbotClient({
@@ -112,12 +113,14 @@ client.on("YouTube.Message", async (data: any) => {
       const q = message.split(" ").slice(1).join(" ");
       if (q && cachedUser.points >= COST_TANYA) {
         cachedUser.points -= COST_TANYA;
-        const reply = await generateRedeemReply(user.id, user.name, q, "tanya");
-        broadcastChat({
-          type: "chat",
-          user: { name: "AI_BOT", color: "#C084FC", badge: "viper", points: 0, profileImageUrl: null },
-          content: `@${user.name}: ${reply || "Hmm, aku bingung mau jawab apa."}`,
-          publishedAt: new Date().toISOString(),
+        aiQueue.add(async () => {
+          const reply = await generateRedeemReply(user.id, user.name, q, "tanya");
+          broadcastChat({
+            type: "chat",
+            user: { name: "AI_BOT", color: "#C084FC", badge: "viper", points: 0, profileImageUrl: null },
+            content: `@${user.name}: ${reply || "Hmm, aku bingung mau jawab apa."}`,
+            publishedAt: new Date().toISOString(),
+          });
         });
       } else if (q) {
         broadcastChat({
@@ -133,21 +136,23 @@ client.on("YouTube.Message", async (data: any) => {
       const target = message.split(" ")[1] || user.name;
       if (cachedUser.points >= COST_ROAST) {
         cachedUser.points -= COST_ROAST;
-        const reply = await generateRedeemReply(user.id, target, `Roast si ${target}!`, "roast");
-        const roastText = reply || "Gak tega aku nge-roast dia...";
+        aiQueue.add(async () => {
+          const reply = await generateRedeemReply(user.id, target, `Roast si ${target}!`, "roast");
+          const roastText = reply || "Gak tega aku nge-roast dia...";
 
-        // Broadcast to overlay
-        broadcastChat({
-          type: "chat",
-          user: { name: "AI_ROAST", color: "#FF6B00", badge: "viper", points: 0, profileImageUrl: null },
-          content: roastText,
-          publishedAt: new Date().toISOString(),
+          // Broadcast to overlay
+          broadcastChat({
+            type: "chat",
+            user: { name: "AI_ROAST", color: "#FF6B00", badge: "viper", points: 0, profileImageUrl: null },
+            content: roastText,
+            publishedAt: new Date().toISOString(),
+          });
+
+          // Send to YouTube chat
+          client.sendMessage("youtube", roastText).catch((err: any) =>
+            console.error("[streamerbot] Failed to send roast to YouTube:", err)
+          );
         });
-
-        // Send to YouTube chat
-        client.sendMessage("youtube", roastText).catch(err =>
-          console.error("[streamerbot] Failed to send roast to YouTube:", err)
-        );
       } else {
         broadcastChat({
           type: "chat",
