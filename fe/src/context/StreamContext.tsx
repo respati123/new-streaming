@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 
-export type ThemeName = "cyberpunk" | "retro";
+export type ThemeName = "cyberpunk" | "retro" | "ios";
 
 export type ChatMsg = {
   id: string;

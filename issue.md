@@ -1,27 +1,28 @@
-# Implement 10 Distinct Donation Alert Styles & Dashboard Selector
+# Feature: Global Theme "iOS"
 
-## Context
-The user wants to choose from 10 different visual styles for Donation Alerts directly from the Dashboard. Each style must have unique positioning, animations, and aesthetics.
+## Deskripsi
+Pengguna ingin menambahkan *Global Theme* baru bernama **iOS**. Tema ini akan diaplikasikan pada seluruh komponen antarmuka (Overlay, Chatbox, Dialogue Box) dengan gaya yang bersih, elegan, dan estetik ala Apple/iOS (Glassmorphism, font sans-serif seperti San Francisco / Inter, warna netral cerah/putih dengan aksen biru/hitam).
 
-## Implementation Steps
+## Rencana Implementasi
 
-### 1. Backend State Management
-- Create `be/src/routes/alertStyle.ts` to manage the in-memory state of `activeAlertStyle` (1 to 10).
-- Add endpoints: `GET /current` and `POST /set`.
-- Broadcast a `style_changed` WebSocket event when updated.
-- Mount this route in `be/src/index.ts`.
+1. **Update CSS Variables (`fe/src/styles.css`)**
+   - Menambahkan *class* `.theme-ios`.
+   - Mengatur `--background`, `--surface`, `--primary`, `--font-display`, `--font-body`, dan lain-lain dengan palet warna iOS.
+   - Mengatur desain *Chatbox* (`.theme-ios .pop-message-bubble`) menjadi seperti *bubble* iMessage (melengkung, *clean*, tanpa *border* tebal).
+   - Mengatur desain *Dialogue Box* menjadi seperti *notification banner* iOS.
 
-### 2. Frontend Component Factory
-- Create directory `fe/src/components/alerts/styles/`.
-- Build 10 distinct React components (e.g., `Style1Minimal.tsx`, `Style2Holographic.tsx`, ..., `Style10Glass.tsx`).
-- Update `fe/src/components/overlay/Alerts.tsx` to fetch the current style on mount, listen to WebSocket changes, and dynamically render the chosen component using a `switch` statement.
+2. **Update Context (`fe/src/context/StreamContext.tsx`)**
+   - Menambahkan tipe `"ios"` ke dalam `ThemeName`.
 
-### 3. Dashboard UI
-- Add a "Donation Alert Styles" tab or section in the Dashboard.
-- Display a 2x5 or 3x4 grid of buttons, each describing a theme.
-- Make POST requests to `/api/alerts/style/set` when a style is clicked.
+3. **Update Theme Switcher (`fe/src/components/ThemeSwitcher.tsx`)**
+   - Menambahkan opsi `{ id: "ios", label: "iOS" }` ke dalam *array* `THEMES` agar bisa dipilih dari *Dashboard*.
 
-## Verification
-- Open Dashboard and Overlay side-by-side.
-- Click through all 10 styles in the Dashboard.
-- Trigger a mock donation for each style and verify that the Overlay renders the correct position, animation, and aesthetic in real-time.
+4. **Update Backend Validasi (`be/src/routes/theme.ts`)**
+   - Menambahkan `"ios"` ke dalam `VALID_THEMES` agar API menerima perubahan *state* tema ini.
+
+## Proses
+Jika rencana ini disetujui, saya akan:
+1. Mempublikasikan *issue* ini ke GitHub (`gh issue create`).
+2. Membuat *branch* baru (`feature/issue-[ID]-ios-theme`).
+3. Menulis dan men-*commit* kodenya.
+4. Membuat *Pull Request* baru.

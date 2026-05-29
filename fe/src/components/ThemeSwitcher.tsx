@@ -3,6 +3,7 @@ import { useStream, type ThemeName } from "@/context/StreamContext";
 const THEMES: { id: ThemeName; label: string }[] = [
   { id: "cyberpunk", label: "Cyberpunk" },
   { id: "retro", label: "Retro" },
+  { id: "ios", label: "iOS" },
 ];
 
 export function ThemeSwitcher() {

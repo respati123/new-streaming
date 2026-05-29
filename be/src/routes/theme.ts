@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { broadcastChat } from "../lib/ws";
 
-const VALID_THEMES = ["cyberpunk", "retro"];
+const VALID_THEMES = ["cyberpunk", "retro", "ios"];
 
 let activeTheme = "cyberpunk";
 
