@@ -66,14 +66,16 @@ bun run preview      # Preview production build
 - **Donation Alerts**: Visual notifications for donations
 - **AI Dialogue Box**: AI-generated responses and interactions
 
-## Mandatory Planning Workflow (GitHub Issues)
+## Mandatory Planning Workflow (GitHub Issues & PRs)
 
 For all feature development and bug fixes (exempting minor tasks like typos or quick questions), strictly follow this workflow:
 1. **Draft Locally**: Create a detailed `issue.md` file locally outlining the plan.
 2. **Await Approval**: Wait for the user to explicitly approve the `issue.md` plan.
-3. **Publish Issue**: Automatically use the `gh` CLI (e.g., `gh issue create --title "..." --body-file issue.md`) to publish the issue to GitHub.
-4. **Execute**: Implement the approved code changes.
-5. **Close Issue**: Once completed and verified, use the `gh` CLI to close the GitHub issue.
+3. **Publish Issue**: Use the `gh` CLI to publish the issue to GitHub (`gh issue create --title "..." --body-file issue.md`).
+4. **Branching**: Create a new git branch for the issue (e.g., `git checkout -b feature/issue-name`).
+5. **Execute**: Implement the approved code changes and commit them to the new branch.
+6. **Pull Request**: Push the branch and create a PR (`gh pr create`). Include "Fixes #IssueNumber" in the PR body.
+7. **Merge**: Wait for the user to review and merge the PR.
 
 ## Development Notes
 

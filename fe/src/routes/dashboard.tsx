@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { ChatBox } from "@/components/dashboard/ChatBox";
 import { OverlayControl } from "@/components/dashboard/OverlayControl";
+import { AlertStyleGallery } from "@/components/dashboard/AlertStyleGallery";
 import { Leaderboard, StreamerBotActions, StreamHistory } from "@/components/dashboard/RightColumn";
 import { ThemeSwitcher } from "@/components/ThemeSwitcher";
 import { StreamProvider } from "@/context/StreamContext";
@@ -126,6 +127,7 @@ function DashboardPage() {
             {/* Controls sidebar */}
             <div className="lg:col-span-4 space-y-4">
               <OverlayControl />
+              <AlertStyleGallery />
             </div>
           </div>
         )}

@@ -46,6 +46,7 @@ type Listeners = {
   absen: (e: AbsenEvt) => void;
   fx: (e: FxEvt) => void;
   spawn: (e: SpawnEvt) => void;
+  alert_style_changed: (style: number) => void;
 };
 
 type Bus = {
@@ -106,6 +107,7 @@ export function StreamProvider({ children }: { children: React.ReactNode }) {
     absen: new Set(),
     fx: new Set(),
     spawn: new Set(),
+    alert_style_changed: new Set(),
   });
 
   const bus: Bus = useMemo(
@@ -289,6 +291,8 @@ export function StreamProvider({ children }: { children: React.ReactNode }) {
             if (themeName) {
               setThemeState(themeName);
             }
+          } else if (data.type === "alert_style_changed") {
+            bus.emit("alert_style_changed" as any, data.data.style);
           }
         } catch (e) {
           console.error("[ws] failed to parse message", e);

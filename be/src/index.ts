@@ -10,6 +10,7 @@ import { saweriaRoute } from "./routes/saweria";
 import { bagibagiRoute } from "./routes/bagibagi";
 import { testRoute } from "./routes/test";
 import { themeRoute } from "./routes/theme";
+import { alertStyleRoute } from "./routes/alertStyle";
 import { registerClient, removeClient } from "./lib/ws";
 import "./services/streamerbot";
 import { initializeTiers } from "./lib/points";
@@ -44,6 +45,7 @@ app.route("/api/saweria", saweriaRoute);
 app.route("/api/bagibagi", bagibagiRoute);
 app.route("/api/test", testRoute);
 app.route("/api/theme", themeRoute);
+app.route("/api/alerts/style", alertStyleRoute);
 
 async function startServer() {
   await initializeTiers();
