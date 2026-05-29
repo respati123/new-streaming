@@ -24,13 +24,15 @@ This is a streaming-focused content automation pipeline and backend service. It 
 2. **Streaming Integration:** Managing messages, users, and stream metadata via Prisma, while communicating with Streamer.bot over WebSockets.
 
 ## Rules for AI Interaction
-- **Mandatory Planning Workflow (Strict Rule):** 
-  - **Scope:** Required for all feature development and bug fixes. Minor tasks (e.g., fixing typos, adding comments, answering questions) are exempt from this rule to prevent repository clutter.
-  - **Step 1 (Discuss & Plan Locally):** ALWAYS discuss the task first. Write down the detailed plan into an `issue.md` file locally. The instructions must be highly detailed and atomic.
+- **Mandatory Planning Workflow (Strict Rule with PRs):** 
+  - **Scope:** Required for all feature development and bug fixes. Minor tasks are exempt.
+  - **Step 1 (Discuss & Plan Locally):** ALWAYS discuss the task first. Write down the detailed plan into an `issue.md` file locally.
   - **Step 2 (Wait for Approval):** DO NOT execute code or publish yet. Wait for the user to explicitly command you to proceed.
-  - **Step 3 (Publish to GitHub):** Once approved, use the `gh` CLI autonomously (e.g., `gh issue create --title "..." --body-file issue.md`) to publish the issue to the GitHub repository.
-  - **Step 4 (Execute):** Execute the code changes according to the plan.
-  - **Step 5 (Close Issue):** Once verified and complete, close the GitHub issue using the `gh` CLI.
+  - **Step 3 (Publish Issue):** Once approved, use the `gh` CLI autonomously (`gh issue create --title "..." --body-file issue.md`) to publish the issue.
+  - **Step 4 (Branching):** Create and switch to a new git branch related to the issue (e.g., `git checkout -b feature/issue-3-queue`).
+  - **Step 5 (Execute & Commit):** Execute the code changes and commit them to the new branch.
+  - **Step 6 (Pull Request):** Push the branch to GitHub and create a Pull Request using the `gh` CLI (`gh pr create`). Ensure the PR body contains "Fixes #IssueNumber" so the issue auto-closes when merged.
+  - **Step 7 (Merge):** Wait for the user to review and merge the Pull Request. Do not merge it yourself unless instructed.
 - **Language:** Write code in strict TypeScript. Prefer descriptive variable names over comments.
 - **Database:** Always use the existing Prisma client instance from `src/lib/prisma.ts`.
 - **API:** Use Hono best practices. Keep route handlers thin; move heavy logic to `src/services/`.

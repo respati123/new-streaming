@@ -1,18 +1,23 @@
 import { useEffect, useState, useRef } from "react";
 import { useStream, type AbsenEvt, type DonationEvt, type FxEvt } from "@/context/StreamContext";
 import { unlockAudio, playDonationSound } from "@/lib/audio";
-
-function getAlertFrameClass(amount: number): string {
-  if (amount < 10000) return "alert-frame-tier-1";
-  if (amount < 50000) return "alert-frame-tier-2";
-  if (amount < 100000) return "alert-frame-tier-3";
-  if (amount < 250000) return "alert-frame-tier-4";
-  return "alert-frame-tier-5";
-}
+import {
+  Style1Minimal,
+  Style2Holographic,
+  Style3Cyberpunk,
+  Style4RetroPixel,
+  Style5iOSClean,
+  Style6AnimeSpeedlines,
+  Style7EGirlPastel,
+  Style8BreakingNews,
+  Style9DarkStealth,
+  Style10GlassSidebar
+} from "../alerts";
 
 export function DonationAlert() {
   const { bus } = useStream();
   const [d, setD] = useState<DonationEvt | null>(null);
+  const [activeStyle, setActiveStyle] = useState<number>(2);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const timeoutsRef = useRef<number[]>([]);
 
@@ -28,14 +33,26 @@ export function DonationAlert() {
   };
 
   useEffect(() => {
+    fetch("/api/alerts/style/current")
+      .then(res => res.json())
+      .then(data => {
+        if (data.style) setActiveStyle(data.style);
+      })
+      .catch(console.error);
+
+    const unsubTheme = bus.on("alert_style_changed" as any, (newStyle: number) => {
+      setActiveStyle(newStyle);
+    });
+
     return () => {
       if (audioRef.current) {
         audioRef.current.pause();
         audioRef.current = null;
       }
       clearAllTimeouts();
+      unsubTheme();
     };
-  }, []);
+  }, [bus]);
 
   useEffect(() => {
     return bus.on("donation", (e) => {
@@ -83,77 +100,19 @@ export function DonationAlert() {
 
   if (!d) return null;
 
-  return (
-    <div className="absolute top-10 right-10 z-30 pointer-events-none mt-12 mr-4">
-      {/* Added mt-12 to compensate for the avatar breaking out of the top border */}
-      <div 
-        className={`backdrop-blur-md px-6 pt-20 pb-8 animate-slide-in-right relative min-w-[320px] max-w-[380px] rounded-2xl ${getAlertFrameClass(d.amount)}`}
-        style={{ backgroundColor: "rgba(0, 0, 0, 0.45)" }}
-      >
-        <Particles />
-        
-        {/* Floating Avatar Container */}
-        <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-32 h-32 rounded-full bg-accent/10 border-4 border-black overflow-hidden flex items-center justify-center p-0.5 shadow-[0_0_40px_rgba(255,255,255,0.2)] z-10 glow-border">
-          <img
-            src={d.profileImageUrl || `https://api.dicebear.com/7.x/pixel-art/svg?seed=${d.name}`}
-            className="w-full h-full object-cover rounded-full bg-black/80"
-            alt="Donation Avatar"
-          />
-        </div>
-
-        <div className="flex flex-col items-center text-center relative z-0 mt-2">
-          <div className="text-[10px] font-display uppercase tracking-[0.4em] text-accent mb-2 drop-shadow-sm glow-text">
-            New Donation
-          </div>
-          
-          <div className="text-2xl font-display leading-tight mb-0.5">
-            <span className="text-primary font-bold glow-text">{d.youtubeName || d.name}</span>
-          </div>
-
-          {d.youtubeName && (
-            <div className="text-[11px] font-medium text-white/50 mb-3 flex items-center justify-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-white/30 inline-block"></span>
-              Alias: <span className="text-white/80">{d.name}</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-white/30 inline-block"></span>
-            </div>
-          )}
-          
-          <div className="text-sm text-foreground/80 mb-1 mt-1">berdonasi sebesar</div>
-          
-          <div className="text-4xl font-display glow-text text-accent font-bold mb-6 drop-shadow-[0_0_15px_rgba(var(--accent-rgb),0.8)]">
-            Rp {d.amount.toLocaleString("id-ID")}
-          </div>
-          
-          <div className="w-full relative">
-            <div className="absolute -inset-1 bg-gradient-to-r from-transparent via-accent/20 to-transparent blur-sm"></div>
-            <p className="relative text-base text-foreground italic border-y border-accent/30 py-3 px-4 bg-black/40 rounded-lg shadow-inner">
-              "{d.message}"
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-
-function Particles() {
-  return (
-    <div className="absolute inset-0 pointer-events-none">
-      {Array.from({ length: 14 }).map((_, i) => (
-        <span
-          key={i}
-          className="absolute w-1 h-1 rounded-full bg-accent"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-            animation: `float-up ${1.5 + Math.random()}s ease-out ${i * 0.05}s forwards`,
-            boxShadow: "0 0 8px var(--glow)",
-          }}
-        />
-      ))}
-    </div>
-  );
+  switch (activeStyle) {
+    case 1: return <Style1Minimal d={d} />;
+    case 2: return <Style2Holographic d={d} />;
+    case 3: return <Style3Cyberpunk d={d} />;
+    case 4: return <Style4RetroPixel d={d} />;
+    case 5: return <Style5iOSClean d={d} />;
+    case 6: return <Style6AnimeSpeedlines d={d} />;
+    case 7: return <Style7EGirlPastel d={d} />;
+    case 8: return <Style8BreakingNews d={d} />;
+    case 9: return <Style9DarkStealth d={d} />;
+    case 10: return <Style10GlassSidebar d={d} />;
+    default: return <Style2Holographic d={d} />;
+  }
 }
 
 export function AbsenToasts() {

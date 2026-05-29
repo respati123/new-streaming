@@ -1,0 +1,10 @@
+export { Style1Minimal } from './styles/Style1Minimal';
+export { Style2Holographic } from './styles/Style2Holographic';
+export { Style3Cyberpunk } from './styles/Style3Cyberpunk';
+export { Style4RetroPixel } from './styles/Style4RetroPixel';
+export { Style5iOSClean } from './styles/Style5iOSClean';
+export { Style6AnimeSpeedlines } from './styles/Style6AnimeSpeedlines';
+export { Style7EGirlPastel } from './styles/Style7EGirlPastel';
+export { Style8BreakingNews } from './styles/Style8BreakingNews';
+export { Style9DarkStealth } from './styles/Style9DarkStealth';
+export { Style10GlassSidebar } from './styles/Style10GlassSidebar';

@@ -289,6 +289,8 @@ export function StreamProvider({ children }: { children: React.ReactNode }) {
             if (themeName) {
               setThemeState(themeName);
             }
+          } else if (data.type === "alert_style_changed") {
+            bus.emit("alert_style_changed" as any, data.data.style);
           }
         } catch (e) {
           console.error("[ws] failed to parse message", e);
